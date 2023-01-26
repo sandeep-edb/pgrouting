@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/sampledata.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/sampledata.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/sampledata.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/sampledata.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/sampledata.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/sampledata.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/sampledata.html>`__
@@ -225,7 +226,7 @@ will be stored on a table.
    :start-after: -- p1
    :end-before: -- p2
 
-Points of interest fillup
+Points of interest geometry
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Inserting the data of the points of interest:
 
@@ -233,21 +234,29 @@ Inserting the data of the points of interest:
    :start-after: -- p2
    :end-before: -- p3
 
-Points of interest geometry
+Points of interest fillup
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Using :doc:`pgr_findCloseEdges`
 Calculating for visual purposes the points over the graph.
 
 .. literalinclude:: sampledata.queries
    :start-after: -- p3
    :end-before: -- p4
 
-Points of interest data
+A special case to arrive from both sides of the edge.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. literalinclude:: sampledata.queries
    :start-after: -- p4
    :end-before: -- p5
+
+Points of interest data
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. literalinclude:: sampledata.queries
+   :start-after: -- p5
+   :end-before: -- p6
 
 .. pois_end
 
@@ -300,7 +309,8 @@ Adding the restrictions
    :start-after: -- r2
    :end-before: -- r3
 
-Restrictions used on :doc:`pgr_turnRestrictedPath`
+Restrictions data
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. literalinclude:: sampledata.queries
    :start-after: -- r3

@@ -1,0 +1,74 @@
+
+/*PGR-GNU*****************************************************************
+
+Copyright (c) 2018  pgRouting developers
+Mail: project@pgrouting.org
+
+------
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ ********************************************************************PGR-GNU*/
+BEGIN;
+
+UPDATE edge_table SET cost = sign(cost), reverse_cost = sign(reverse_cost);
+SELECT plan(6);
+
+PREPARE noflag AS
+SELECT * FROM pgr_maxCardinalityMatch(
+  'SELECT id, source, target, cost, reverse_cost FROM edge_table'
+);
+
+PREPARE mcm_dir AS
+SELECT * FROM pgr_maxCardinalityMatch(
+  'SELECT id, source, target, cost, reverse_cost FROM edge_table',
+  directed := true
+);
+PREPARE mcm_undir AS
+SELECT * FROM pgr_maxCardinalityMatch(
+  'SELECT id, source, target, cost, reverse_cost FROM edge_table',
+  directed := false
+);
+
+PREPARE mcm_noflag AS
+SELECT * FROM pgr_maxCardinalityMatch(
+  'SELECT id, source, target, cost AS going, reverse_cost AS coming FROM edge_table'
+);
+
+PREPARE mcm_dir1 AS
+SELECT * FROM pgr_maxCardinalityMatch(
+  'SELECT id, source, target, cost AS going, reverse_cost AS coming FROM edge_table',
+  directed := true
+);
+PREPARE mcm_undir1 AS
+SELECT * FROM pgr_maxCardinalityMatch(
+  'SELECT id, source, target, cost AS going, reverse_cost AS coming FROM edge_table',
+  directed := false
+);
+
+SELECT CASE min_lib_version('3.4.0') WHEN true
+THEN
+  collect_tap(
+    lives_ok('noflag','noflag'),
+-- TODO v4 directed/undirected are to be removed, remove these tests
+    lives_ok('mcm_dir','directed'),
+    lives_ok('mcm_undir','undirected'))
+ELSE
+  skip('cost & reverse cost used on 3.4', 3)
+END;
+
+-- TODO v4 going & coming are to be removed, remove these tests
+SELECT lives_ok('mcm_noflag','noflag');
+SELECT lives_ok('mcm_dir1','directed');
+SELECT lives_ok('mcm_undir1','undirected');
+
+SELECT finish();
+ROLLBACK;

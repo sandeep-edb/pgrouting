@@ -5,7 +5,7 @@ SET
 /* -- q1 */
 SELECT * FROM pgr_turnRestrictedPath(
   $$SELECT id, source, target, cost, reverse_cost FROM edges$$,
-  $$SELECT path, cost FROM new_restrictions$$,
+  $$SELECT path, cost FROM restrictions$$,
   3, 8, 3);
  seq | path_id | path_seq | node | edge | cost | agg_cost
 -----+---------+----------+------+------+------+----------
@@ -17,7 +17,7 @@ SELECT * FROM pgr_turnRestrictedPath(
 /* -- q2 */
 SELECT * FROM pgr_turnRestrictedPath(
   $$SELECT id, source, target, cost, reverse_cost FROM edges$$,
-  $$SELECT path, cost FROM new_restrictions$$,
+  $$SELECT path, cost FROM restrictions$$,
   3, 8, 3,
   strict => true);
  seq | path_id | path_seq | node | edge | cost | agg_cost
@@ -27,7 +27,7 @@ SELECT * FROM pgr_turnRestrictedPath(
 /* -- q3 */
 SELECT * FROM pgr_turnRestrictedPath(
   $$SELECT id, source, target, cost, reverse_cost FROM edges$$,
-  $$SELECT path, cost FROM new_restrictions$$,
+  $$SELECT path, cost FROM restrictions$$,
   3, 8, 3,
   directed => false);
  seq | path_id | path_seq | node | edge | cost | agg_cost
@@ -44,7 +44,7 @@ SELECT * FROM pgr_turnRestrictedPath(
 /* -- q4 */
 SELECT * FROM pgr_turnRestrictedPath(
   $$SELECT id, source, target, cost, reverse_cost FROM edges$$,
-  $$SELECT path, cost FROM new_restrictions$$,
+  $$SELECT path, cost FROM restrictions$$,
   3, 8, 3,
   directed => false,
   heap_paths => true,

@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/pgr_connectedComponents.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/pgr_connectedComponents.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/pgr_connectedComponents.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/pgr_connectedComponents.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/pgr_connectedComponents.html>`__
@@ -71,12 +72,13 @@ from each other.
 Signatures
 -------------------------------------------------------------------------------
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_connectedComponents(`Edges SQL`_)
+   | pgr_connectedComponents(`Edges SQL`_)
 
-    RETURNS SET OF (seq, component, node)
-    OR EMPTY SET
+   | RETURNS SET OF |result-component-V|
+   | OR EMPTY SET
 
 :Example: The connected components of the graph
 
@@ -110,7 +112,7 @@ Result Columns
 
 .. return_componentsV_start
 
-Returns set of ``(seq, component, node)``
+Returns set of |result-component-V|
 
 .. list-table::
    :width: 81

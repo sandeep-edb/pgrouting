@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/via-category.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/via-category.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/via-category.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/via-category.html>`__
 
 Via - Category
 ===============================================================================
@@ -25,6 +26,9 @@ Via - Category
 .. proposed start
 
 * :doc:`pgr_dijkstraVia`
+* :doc:`pgr_withPointsVia`
+* :doc:`pgr_trspVia`
+* :doc:`pgr_trspVia_withPoints`
 
 .. proposed end
 
@@ -48,6 +52,7 @@ Parameters
 **Used on:**
 
 * :doc:`pgr_dijkstraVia`
+* :doc:`pgr_trspVia`
 
 .. via_parameters_start
 
@@ -65,16 +70,52 @@ Parameters
      -
      - SQL query as described.
    * - **via vertices**
-     - ``ARRAY[`` **ANY-INTEGER** ``]``
+     - ``ARRAY`` [ **ANY-INTEGER** ]
      -
      - Array of ordered vertices identifiers that are going to be visited.
 
 Where:
 
 :ANY-INTEGER: SMALLINT, INTEGER, BIGINT
-:ANY-NUMERICAL: SMALLINT, INTEGER, BIGINT, REAL, FLOAT
 
 .. via_parameters_end
+
+**Used on:**
+
+* :doc:`pgr_withPointsVia`
+* :doc:`pgr_trspVia_withPoints`
+
+.. via_withPoints_parameters_start
+
+.. list-table::
+   :width: 81
+   :widths: 14 20 7 40
+   :header-rows: 1
+
+   * - Parameter
+     - Type
+     - Default
+     - Description
+   * - `Edges SQL`_
+     - ``TEXT``
+     -
+     - SQL query as described.
+   * - `Points SQL`_
+     - ``TEXT``
+     -
+     - SQL query as described.
+   * - **via vertices**
+     - ``ARRAY`` [ **ANY-INTEGER** ]
+     -
+     - Array of ordered vertices identifiers that are going to be visited.
+
+       * When positive it is considered a vertex identifier
+       * When negative it is considered a point identifier
+
+Where:
+
+:ANY-INTEGER: SMALLINT, INTEGER, BIGINT
+:ANY-NUMERICAL: SMALLINT, INTEGER, BIGINT, REAL, FLOAT
 
 .. via_withPoints_parameters_end
 
@@ -117,6 +158,8 @@ Depending on the function one or more inner queries are needed.
 Edges SQL
 ...............................................................................
 
+.. rubric:: Used on all Via functions
+
 .. include:: pgRouting-concepts.rst
     :start-after: basic_edges_sql_start
     :end-before: basic_edges_sql_end
@@ -124,9 +167,24 @@ Edges SQL
 Restrictions SQL
 ...............................................................................
 
+Used on
+
+* :doc:`pgr_trspVia`
+
 .. include:: pgRouting-concepts.rst
    :start-after: restrictions_columns_start
    :end-before: restrictions_columns_end
+
+Points SQL
+...............................................................................
+
+Used on
+
+* :doc:`pgr_withPointsVia`
+
+.. include:: withPoints-category.rst
+    :start-after: points_sql_start
+    :end-before: points_sql_end
 
 Result Columns
 -------------------------------------------------------------------------------
@@ -193,6 +251,8 @@ See Also
 -------------------------------------------------------------------------------
 
 * :doc:`pgr_dijkstraVia`
+* :doc:`pgr_trspVia`
+* :doc:`pgr_withPointsVia`
 
 .. rubric:: Indices and tables
 

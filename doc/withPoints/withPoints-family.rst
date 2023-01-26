@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/withPoints-family.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/withPoints-family.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/withPoints-family.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/withPoints-family.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/withPoints-family.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/withPoints-family.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/withPoints-family.html>`__
@@ -38,6 +39,7 @@ When points are also given as input:
 - :doc:`pgr_withPointsCostMatrix` - Costs of the shortest paths.
 - :doc:`pgr_withPointsKSP` - K shortest paths.
 - :doc:`pgr_withPointsDD` - Driving distance.
+- :doc:`pgr_withPointsVia` - Via routing
 
 .. index proposed to here
 
@@ -49,6 +51,7 @@ When points are also given as input:
     pgr_withPointsCostMatrix
     pgr_withPointsKSP
     pgr_withPointsDD
+    pgr_withPointsVia
 
 Introduction
 -------------------------------------------------------------------------------
@@ -63,6 +66,7 @@ Depending on the name:
 - pgr_withPointsCostMatrix is pgr_dijkstraCostMatrix **with points**
 - pgr_withPointsKSP is pgr_ksp **with points**
 - pgr_withPointsDD is pgr_drivingDistance **with points**
+- pgr_withPointsvia is pgr_dijkstraVia **with points**
 
 Parameters
 -------------------------------------------------------------------------------

@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/drivingDistance-category.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/drivingDistance-category.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/drivingDistance-category.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/drivingDistance-category.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/drivingDistance-category.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/drivingDistance-category.html>`__)
   `3.0 <https://docs.pgrouting.org/3.0/en/drivingDistance-category.html>`__
@@ -59,7 +60,6 @@ Calculate nodes that are within a distance.
 * Extracts all the nodes that have costs less than or equal to the value
   distance.
 * The edges extracted will conform to the corresponding spanning tree.
-  Edge
 * Edge :math:`(u, v)` will not be included when:
 
   * The distance from the **root** to :math:`u` > limit distance.

@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/pgr_withPointsKSP.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/pgr_withPointsKSP.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/pgr_withPointsKSP.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/pgr_withPointsKSP.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/pgr_withPointsKSP.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/pgr_withPointsKSP.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/pgr_withPointsKSP.html>`__
@@ -55,11 +56,14 @@ using Yen algorithm, finds the :math:`K` shortest paths.
 Signatures
 -------------------------------------------------------------------------------
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-   pgr_withPointsKSP(`Edges SQL`_, `Points SQL`_ **start_pid**, **end_pid**, **K**
-     [, directed] [, heap_paths] [, driving_side] [, details])
-   RETURNS SET OF (seq, path_id, path_seq, node, edge, cost, agg_cost)
+   | pgr_withPointsKSP(`Edges SQL`_, `Points SQL`_ **start vid**, **end vid**, **K**, [**options**])
+   | **options:**  ``[directed, heap_paths, driving_side, details]``
+
+   | RETURNS SET OF |ksp-result|
+   | OR EMPTY SET
 
 :Example: Get 2 paths from Point :math:`1` to point :math:`2` on a directed
           graph.
@@ -94,9 +98,13 @@ Parameters
    * - **start vid**
      - **ANY-INTEGER**
      - Identifier of the departure vertex.
+
+       - Negative values represent a point
    * - **end vid**
      - **ANY-INTEGER**
-     - Identifier of the departure vertex.
+     - Identifier of the destination vertex.
+
+       - Negative values represent a point
    * - **K**
      - **ANY-INTEGER**
      - Number of required paths
@@ -155,6 +163,18 @@ Additional Examples
 
 .. contents::
    :local:
+
+Use :doc:`pgr_findCloseEdges` in the `Points SQL`_.
+...............................................................................
+
+Get :math:`2` paths using left side driving topology, from vertex :math:`1` to
+the closest location on the graph of point `(2.9, 1.8)`.
+
+.. literalinclude:: doc-pgr_withPointsKSP.queries
+    :start-after: --q4
+    :end-before: -- q5
+
+* Point :math:`-1` corresponds to the closest edge from point `(2.9,1.8)`.
 
 Left driving side
 ...............................................................................

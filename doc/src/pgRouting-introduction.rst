@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/pgRouting-introduction.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/pgRouting-introduction.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/pgRouting-introduction.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/pgRouting-introduction.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/pgRouting-introduction.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/pgRouting-introduction.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/pgRouting-introduction.html>`__
@@ -83,9 +84,10 @@ Individuals in this release (in alphabetical order)
 Ashish Kumar,
 Cayetano Benavent,
 Daniel Kastl,
-Loïc Bartoletti,
+Nitish Chauhan,
 Rajat Shinde,
 Regina Obe,
+Shobhit Chaurasia,
 Swapnil Joshi,
 Virginia Vergara
 
@@ -140,7 +142,6 @@ Jinfu Leng,
 Kai Behncke,
 Kishore Kumar,
 Ko Nagase,
-Loïc Bartoletti,
 Mahmoud Sakr,
 Manikata Kondeti,
 Mario Basa,
@@ -150,11 +151,13 @@ Maoguang Wang,
 Mohamed Bakli,
 Mohamed Zia,
 Mukul Priya,
+Nitish Chauhan,
 Rajat Shinde,
 Razequl Islam,
 Regina Obe,
 Rohith Reddy,
 Sarthak Agarwal,
+Shobhit Chaurasia,
 Sourabh Garg,
 Stephen Woodbridge,
 Swapnil Joshi,

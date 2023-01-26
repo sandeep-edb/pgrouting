@@ -1,0 +1,107 @@
+
+/*PGR-GNU*****************************************************************
+
+Copyright (c) 2018  pgRouting developers
+Mail: project@pgrouting.org
+
+------
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ ********************************************************************PGR-GNU*/
+BEGIN;
+
+SELECT plan(13);
+
+CREATE OR REPLACE FUNCTION types_check()
+RETURNS SETOF TEXT AS
+$BODY$
+BEGIN
+
+  RETURN QUERY SELECT has_function('pgr_dagshortestpath');
+
+  RETURN QUERY SELECT has_function('pgr_dagshortestpath', ARRAY[ 'text', 'bigint', 'bigint' ]);
+  RETURN QUERY SELECT has_function('pgr_dagshortestpath', ARRAY[ 'text', 'anyarray', 'bigint' ]);
+  RETURN QUERY SELECT has_function('pgr_dagshortestpath', ARRAY[ 'text', 'bigint', 'anyarray' ]);
+  RETURN QUERY SELECT has_function('pgr_dagshortestpath', ARRAY[ 'text', 'anyarray', 'anyarray' ]);
+
+  RETURN QUERY SELECT function_returns('pgr_dagshortestpath', ARRAY[ 'text', 'bigint', 'bigint' ], 'setof record');
+  RETURN QUERY SELECT function_returns('pgr_dagshortestpath', ARRAY[ 'text', 'anyarray', 'bigint' ], 'setof record');
+  RETURN QUERY SELECT function_returns('pgr_dagshortestpath', ARRAY[ 'text', 'bigint', 'anyarray' ], 'setof record');
+  RETURN QUERY SELECT function_returns('pgr_dagshortestpath', ARRAY[ 'text', 'anyarray', 'anyarray' ], 'setof record');
+
+  RETURN QUERY
+  SELECT CASE
+  WHEN min_version('3.2.0') THEN
+    collect_tap(
+      has_function('pgr_dagshortestpath', ARRAY['text','text']),
+      function_returns('pgr_dagshortestpath', ARRAY['text','text'], 'setof record')
+    )
+  ELSE
+    skip(2, 'Combinations functiontionality new on 3.2.0')
+  END;
+
+  RETURN QUERY
+  SELECT CASE
+  WHEN min_version('3.2.0') THEN
+    collect_tap(
+      set_has(
+        $$SELECT  proargnames from pg_proc where proname = 'pgr_dagshortestpath'$$,
+        $$VALUES
+        ('{"","","","seq","path_seq","node","edge","cost","agg_cost"}'::TEXT[]),
+        ('{"","","","seq","path_seq","node","edge","cost","agg_cost"}'::TEXT[]),
+        ('{"","","","seq","path_seq","node","edge","cost","agg_cost"}'::TEXT[]),
+        ('{"","","","seq","path_seq","node","edge","cost","agg_cost"}'::TEXT[])
+        $$
+      ),
+      set_has(
+        $$SELECT  proallargtypes from pg_proc where proname = 'pgr_dagshortestpath'$$,
+        $$VALUES
+        ('{25,20,20,23,23,20,20,701,701}'::OID[]),
+        ('{25,20,2277,23,23,20,20,701,701}'::OID[]),
+        ('{25,2277,20,23,23,20,20,701,701}'::OID[]),
+        ('{25,2277,2277,23,23,20,20,701,701}'::OID[])
+        $$
+      )
+    )
+
+  ELSE
+
+    collect_tap(
+      set_has(
+        $$SELECT  proargnames from pg_proc where proname = 'pgr_dagshortestpath'$$,
+        $$VALUES
+        ('{"","","","seq","path_seq","node","edge","cost","agg_cost"}'::TEXT[]),
+        ('{"","","","seq","path_seq","node","edge","cost","agg_cost"}'::TEXT[]),
+        ('{"","","","seq","path_seq","node","edge","cost","agg_cost"}'::TEXT[]),
+        ('{"","","","seq","path_seq","node","edge","cost","agg_cost"}'::TEXT[])
+        $$
+      ),
+      set_has(
+        $$SELECT  proallargtypes from pg_proc where proname = 'pgr_dagshortestpath'$$,
+        $$VALUES
+        ('{25,20,20,23,23,20,20,701,701}'::OID[]),
+        ('{25,20,2277,23,23,20,20,701,701}'::OID[]),
+        ('{25,2277,20,23,23,20,20,701,701}'::OID[]),
+        ('{25,2277,2277,23,23,20,20,701,701}'::OID[])
+        $$
+      )
+    )
+  END;
+
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+SELECT types_check();
+
+SELECT finish();
+ROLLBACK;

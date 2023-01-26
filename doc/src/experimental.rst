@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/experimental.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/experimental.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/experimental.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/experimental.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/experimental.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/experimental.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/experimental.html>`__
@@ -89,12 +90,25 @@ Experimental Functions
    :start-after: index experimental from here
    :end-before: index experimental to here
 
+:doc:`ordering-family`
+
+.. include:: ordering-family.rst
+   :start-after: index from here
+   :end-before: index to here
+
+:doc:`TRSP-family`
+
+.. include:: TRSP-family.rst
+   :start-after: index experimental from here
+   :end-before: index experimental to here
+
 .. toctree::
    :hidden:
 
    chinesePostmanProblem-family
    transformation-family
    components-family
+   ordering-family
 
 .. rubric:: categories
 
@@ -118,8 +132,8 @@ Experimental Functions
 - :doc:`pgr_stoerWagner`
 - :doc:`pgr_topologicalSort`
 - :doc:`pgr_transitiveClosure`
-- :doc:`pgr_turnRestrictedPath`
 - :doc:`pgr_lengauerTarjanDominatorTree`
+- :doc:`pgr_hawickCircuits`
 
 .. toctree::
   :hidden:
@@ -133,8 +147,8 @@ Experimental Functions
   pgr_stoerWagner
   pgr_topologicalSort
   pgr_transitiveClosure
-  pgr_turnRestrictedPath
   pgr_lengauerTarjanDominatorTree
+  pgr_hawickCircuits
 
 
 See Also

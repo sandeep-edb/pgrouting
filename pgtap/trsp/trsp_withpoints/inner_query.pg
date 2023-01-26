@@ -1,0 +1,63 @@
+
+/*PGR-GNU*****************************************************************
+
+Copyright (c) 2018  pgRouting developers
+Mail: project@pgrouting.org
+
+------
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ ********************************************************************PGR-GNU*/
+BEGIN;
+
+UPDATE edge_table SET cost = sign(cost), reverse_cost = sign(reverse_cost);
+SELECT CASE WHEN min_version('3.4.0') THEN plan(492) ELSE plan(1) END;
+
+
+CREATE OR REPLACE FUNCTION inner_query() RETURNS SETOF TEXT AS
+$BODY$
+BEGIN
+  IF NOT min_version('3.4.0') THEN
+    RETURN QUERY SELECT skip(1, 'signature added on 3.4.0');
+    RETURN;
+  END IF;
+
+  -- ONE TO ONE
+  RETURN QUERY SELECT style_dijkstra('pgr_trsp_withPoints(', ', $$SELECT * from restrictions$$, $$SELECT * from pointsOfInterest$$, 2, 3, false)');
+  RETURN QUERY SELECT innerquery_restrictions('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,', ',$$SELECT * from pointsOfInterest$$, 2, 3, false)');
+  RETURN QUERY SELECT innerquery_points('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,$$SELECT * from restrictions$$,', ', 2, 3, false)');
+  -- ONE TO MANY
+  RETURN QUERY SELECT style_dijkstra('pgr_trsp_withPoints(', ', $$SELECT * from restrictions$$,$$SELECT * from pointsOfInterest$$, 2, ARRAY[3], false)');
+  RETURN QUERY SELECT innerquery_restrictions('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,', ',$$SELECT * from pointsOfInterest$$, 2, ARRAY[3], false)');
+  RETURN QUERY SELECT innerquery_points('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,$$SELECT * from restrictions$$,', ', 2, ARRAY[3], false)');
+  -- MANY TO ONE
+  RETURN QUERY SELECT style_dijkstra('pgr_trsp_withPoints(', ', $$SELECT * from restrictions$$,$$SELECT * from pointsOfInterest$$, ARRAY[2], 3, false)');
+  RETURN QUERY SELECT innerquery_restrictions('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,', ',$$SELECT * from pointsOfInterest$$, ARRAY[2], 3, false)');
+  RETURN QUERY SELECT innerquery_points('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,$$SELECT * from restrictions$$,', ', ARRAY[2], 3, false)');
+  -- MANY TO MANY
+  RETURN QUERY SELECT style_dijkstra('pgr_trsp_withPoints(', ', $$SELECT * from restrictions$$,$$SELECT * from pointsOfInterest$$, ARRAY[2], ARRAY[3], false)');
+  RETURN QUERY SELECT innerquery_restrictions('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,', ',$$SELECT * from pointsOfInterest$$, ARRAY[2], ARRAY[3], false)');
+  RETURN QUERY SELECT innerquery_points('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,$$SELECT * from restrictions$$,', ', ARRAY[2], ARRAY[3], false)');
+  -- COMBINATIONS
+  RETURN QUERY SELECT style_dijkstra('pgr_trsp_withPoints(', ', $$SELECT * from restrictions$$,$$SELECT * from pointsOfInterest$$, $$SELECT * FROM combinations_table$$, false)');
+  RETURN QUERY SELECT innerquery_restrictions('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,', ',$$SELECT * from pointsOfInterest$$, $$SELECT * FROM combinations_table$$, false)');
+  RETURN QUERY SELECT innerquery_points('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,$$SELECT * from restrictions$$,', ', $$SELECT * FROM combinations_table$$, false)');
+  RETURN QUERY SELECT innerquery_combinations('pgr_trsp_withPoints($$SELECT * FROM edge_table$$,$$SELECT * from restrictions$$,$$SELECT * from pointsOfInterest$$,',', false)');
+
+END
+$BODY$
+LANGUAGE plpgsql VOLATILE;
+
+SELECT inner_query();
+
+SELECT finish();
+ROLLBACK;

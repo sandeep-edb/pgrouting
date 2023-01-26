@@ -1,3 +1,5 @@
+-- CopyRight(c) pgRouting developers
+-- Creative Commons Attribution-Share Alike 3.0 License : https://creativecommons.org/licenses/by-sa/3.0/
 SET extra_float_digits=-3;
 /* -- q1 */
 SELECT * FROM pgr_withPoints(
@@ -65,3 +67,13 @@ FROM pgr_withPoints(
   driving_side => 'l', details => true)
 WHERE node IN (-6, 11);
 /* -- q9 */
+SELECT * FROM pgr_withPoints(
+  $e$ SELECT * FROM edges $e$,
+  $p$ SELECT edge_id, round(fraction::numeric, 2) AS fraction, side
+      FROM pgr_findCloseEdges(
+        $$SELECT id, geom FROM edges$$,
+        (SELECT ST_POINT(2.9, 1.8)),
+        0.5, cap => 2)
+  $p$,
+  1, ARRAY[-1, -2]);
+/* -- q10 */

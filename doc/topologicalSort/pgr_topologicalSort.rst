@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/pgr_topologicalSort.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/pgr_topologicalSort.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/pgr_topologicalSort.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/pgr_topologicalSort.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/pgr_topologicalSort.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/pgr_topologicalSort.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/pgr_topologicalSort.html>`__
@@ -65,11 +66,13 @@ Signatures
 .. index::
    single: topologicalSort - Experimental on v3.0
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_topologicalSort(`Edges SQL`_)
-    RETURNS SET OF (seq, sorted_v)
-    OR EMPTY SET
+   | pgr_topologicalSort(`Edges SQL`_)
+
+   | RETURNS SET OF |result-toposort|
+   | OR EMPTY SET
 
 :Example: Topologically sorting the graph
 
@@ -97,7 +100,7 @@ Edges SQL
 Result Columns
 -------------------------------------------------------------------------------
 
-Returns set of ``(seq, sorted_v)``
+Returns set of |result-toposort|
 
 .. list-table::
    :width: 81

@@ -134,23 +134,25 @@ if(NOT WITH_DOC)
     return()
 endif()
 
+option(DOC_USE_BOOTSTRAP
+    "Set ON|OFF (default=ON) to build Documentation library with bootstrap" OFF)
 
 #---------------------------------------------
 # Checking for prerequisites
 #---------------------------------------------
-find_package(Sphinx ${SPHINX_MINIMUM_VERSION} REQUIRED)
+find_package(Sphinx ${SPHINX_MINIMUM_VERSION})
 
 if (NOT SPHINX_FOUND)
-    message(FATAL_ERROR "Sphinx not found.
-    Cannot generate documentation!
-    Install Sphinx or build without documentation")
+    message(WARNING "Sphinx not found.
+    building without documentation")
+    return()
 endif()
 
-if (SPHINX_VERSION VERSION_LESS 1.0)
-    message(WARNING "Your Sphinx version is too old!
-    This project requires Sphinx v${SPHINX_MINIMUM_VERSION} or above to produce
-    proper documentation (you have v${SPHINX_VERSION}).
-    You will get output but it will have errors.")
+if (SPHINX_VERSION VERSION_LESS ${SPHINX_MINIMUM_VERSION})
+    message(WARNING "Found Sphinx v${SPHINX_VERSION}!
+    This project requires Sphinx at least v${SPHINX_MINIMUM_VERSION}
+    building without documentation")
+    return()
 endif()
 
 #pip install rst2pdf
@@ -160,8 +162,6 @@ endif()
 #---------------------------------------------
 # Kind of "looks"
 #---------------------------------------------
-option(DOC_USE_BOOTSTRAP
-    "Set ON|OFF (default=ON) to build Documentation library tree as MAN page" OFF)
 
 if (DOC_USE_BOOTSTRAP)
     set(SPHINX_INCLUDE "import sphinx_bootstrap_theme")
@@ -236,7 +236,7 @@ if (LOCALE)
         "${PGR_DOCUMENTATION_SOURCE_DIR}"
         "${CMAKE_SOURCE_DIR}/locale/pot"
 
-        COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l en,es > locale_changes.txt
+        COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l en > locale_changes.txt
     #COMMAND sphinx-intl update -p ${CMAKE_SOURCE_DIR}/locale/pot -d ${CMAKE_SOURCE_DIR}/locale --language=${SPHINXINTL_LANGUAGE}
     #COMMAND sphinx-intl update-txconfig-resources --locale-dir ${CMAKE_SOURCE_DIR}/locale --pot-dir ${CMAKE_SOURCE_DIR}/locale/pot --transifex-project-name pgrouting
 

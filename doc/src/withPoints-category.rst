@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/withPoints-category.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/withPoints-category.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/withPoints-category.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/withPoints-category.html>`__
 
 withPoints - Category
 ===============================================================================
@@ -25,6 +26,10 @@ When points are added to the graph.
 .. proposed start
 
 - :doc:`withPoints-family` - Functions based on Dijkstra algorithm.
+- From the :doc:`TRSP-family`:
+
+  - :doc:`pgr_trsp_withPoints` - Vertex/Point routing with restrictions.
+  - :doc:`pgr_trspVia_withPoints` - Via Vertex/point routing with restrictions.
 
 .. proposed end
 
@@ -72,6 +77,8 @@ All this functions consider as many traits from the "real world" as possible:
     - There is a table on the database that describes the points
 
   - **Temporal**: for example points given through a web application
+
+    - Use :doc:`pgr_findCloseEdges` in the `Points SQL`_.
 
 - The numbering of the points are handled with negative sign.
 
@@ -298,6 +305,7 @@ _______________________________________________________________________________
 
 - Like having all points to be considered in both sides ``b``
 - Prefered usage on **undirected** graphs
+- On the :doc:`TRSP-family` this option is not valid
 
 .. image:: images/noMatterDrivingSide.png
     :scale: 50%

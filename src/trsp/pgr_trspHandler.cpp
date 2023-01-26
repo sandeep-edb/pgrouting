@@ -63,6 +63,33 @@ Pgr_trspHandler::Pgr_trspHandler(
             directed);
 }
 
+Pgr_trspHandler::Pgr_trspHandler(
+        Edge_t *edges,
+        const size_t edge_count,
+        const std::vector<Edge_t> &new_edges,
+        const bool directed,
+        const std::vector<Rule> &ruleList) :
+    m_ruleTable() {
+    initialize_restrictions(ruleList);
+
+    auto point_edges = new_edges;
+    renumber_edges(edges, edge_count, point_edges);
+
+    for (const auto& id :  m_id_to_idx) {
+        m_idx_to_id[id.second] = id.first;
+    }
+
+    construct_graph(
+            edges,
+            edge_count,
+            directed);
+    add_point_edges(
+            point_edges,
+            directed);
+}
+
+
+
 // -------------------------------------------------------------------------
 void
 Pgr_trspHandler::renumber_edges(
@@ -127,8 +154,8 @@ void Pgr_trspHandler::clear() {
 
 // -------------------------------------------------------------------------
 double Pgr_trspHandler::construct_path(int64_t ed_id, Position pos) {
-    pgassert(pos != ILLEGAL);
     if (pos == ILLEGAL) return (std::numeric_limits<double>::max)();
+    pgassert(pos != ILLEGAL);
 
     if (m_parent[static_cast<size_t>(ed_id)].isIllegal(pos)) {
         Path_t pelement;
@@ -219,7 +246,7 @@ double Pgr_trspHandler::get_tot_cost(
 // -------------------------------------------------------------------------
 void Pgr_trspHandler::explore(
         int64_t cur_node,
-        const EdgeInfo& cur_edge,
+        const EdgeInfo cur_edge,
         bool isStart) {
     double totalCost;
 
@@ -293,6 +320,10 @@ Path
 Pgr_trspHandler::process(
         const int64_t start_vertex,
         const int64_t end_vertex) {
+    if (m_id_to_idx.find(start_vertex) == m_id_to_idx.end()
+        || m_id_to_idx.find(end_vertex) == m_id_to_idx.end()) {
+        return Path();
+    }
     clear();
     pgassert(m_id_to_idx.find(start_vertex) != m_id_to_idx.end());
     pgassert(m_id_to_idx.find(end_vertex) != m_id_to_idx.end());
@@ -342,8 +373,8 @@ Pgr_trspHandler::process(
  */
 std::deque<Path>
 Pgr_trspHandler::process(
-        const std::vector<int64_t>& sources,
-        const std::vector<int64_t>& targets) {
+        const std::vector<int64_t> sources,
+        const std::vector<int64_t> targets) {
     std::deque<Path> paths;
     for (const auto &s : sources) {
         for (const auto &t : targets) {

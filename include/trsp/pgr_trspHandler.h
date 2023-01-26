@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #include "cpp_common/basePath_SSEC.hpp"
 #include "trsp/edgeInfo.h"
 #include "cpp_common/rule.h"
+#include "cpp_common/pgr_messages.h"
 
 namespace pgrouting {
 namespace trsp {
@@ -50,7 +51,7 @@ namespace trsp {
 
 
 
-class Pgr_trspHandler {
+class Pgr_trspHandler : public pgrouting::Pgr_messages {
     /**
      * Used in the priority queue
      */
@@ -106,6 +107,13 @@ class Pgr_trspHandler {
             const size_t edge_count,
             const bool directed,
             const std::vector<Rule> &ruleList);
+    Pgr_trspHandler(
+            Edge_t *edges,
+            const size_t edge_count,
+            const std::vector<Edge_t> &new_edges,
+            const bool directed,
+            const std::vector<Rule> &ruleList);
+
 
     Pgr_trspHandler(void) = delete;
     ~Pgr_trspHandler(void) = default;
@@ -120,8 +128,8 @@ class Pgr_trspHandler {
             std::set<int64_t>> &combinations);
 
     std::deque<Path> process(
-            const std::vector<int64_t>& sources,
-            const std::vector<int64_t>& targets);
+            const std::vector<int64_t> sources,
+            const std::vector<int64_t> targets);
 
 
     void clear();
@@ -149,7 +157,7 @@ class Pgr_trspHandler {
 
     void explore(
             int64_t cur_node,
-            const EdgeInfo& cur_edge,
+            const EdgeInfo cur_edge,
             bool isStart);
 
     double getRestrictionCost(

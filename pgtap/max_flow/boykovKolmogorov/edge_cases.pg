@@ -1,0 +1,47 @@
+
+/*PGR-GNU*****************************************************************
+
+Copyright (c) 2018  pgRouting developers
+Mail: project@pgrouting.org
+
+------
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ ********************************************************************PGR-GNU*/
+BEGIN;
+
+SELECT plan(4);
+
+PREPARE t1 AS
+SELECT * FROM pgr_boykovKolmogorov(
+  'SELECT id, source, target, capacity, reverse_capacity FROM edge_table',
+  3, 5);
+PREPARE t2 AS
+SELECT * FROM pgr_boykovKolmogorov(
+  'SELECT id, source, target, capacity, reverse_capacity FROM edge_table',
+  3, ARRAY[5]);
+PREPARE t3 AS
+SELECT * FROM pgr_boykovKolmogorov(
+  'SELECT id, source, target, capacity, reverse_capacity FROM edge_table',
+  ARRAY[3], 5);
+PREPARE t4 AS
+SELECT * FROM pgr_boykovKolmogorov(
+  'SELECT id, source, target, capacity, reverse_capacity FROM edge_table',
+  3, ARRAY[5]);
+
+SELECT lives_ok('t1','pgr_boykovKolmogorov(one to One)');
+SELECT lives_ok('t2','pgr_boykovKolmogorov(one to Many)');
+SELECT lives_ok('t3','pgr_boykovKolmogorov(Many to One)');
+SELECT lives_ok('t4','pgr_boykovKolmogorov(Many to Many)');
+
+SELECT * FROM finish();
+ROLLBACK;

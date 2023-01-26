@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/pgr_sequentialVertexColoring.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/pgr_sequentialVertexColoring.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/pgr_sequentialVertexColoring.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/pgr_sequentialVertexColoring.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/pgr_sequentialVertexColoring.html>`__
 
 pgr_sequentialVertexColoring - Proposed
@@ -70,12 +71,13 @@ Signatures
 .. index::
     single: sequentialVertexColoring - Proposed on v3.3
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_sequentialVertexColoring(`Edges SQL`_)
+   | pgr_sequentialVertexColoring(`Edges SQL`_)
 
-    RETURNS SET OF (vertex_id, color_id)
-    OR EMPTY SET
+   | RETURNS SET OF |result-node-color|
+   | OR EMPTY SET
 
 :Example: Graph coloring of pgRouting :doc:`sampledata`
 

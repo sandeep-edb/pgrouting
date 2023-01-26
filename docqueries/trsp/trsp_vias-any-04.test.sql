@@ -1,3 +1,5 @@
+-- CopyRight(c) pgRouting developers
+-- Creative Commons Attribution-Share Alike 3.0 License : https://creativecommons.org/licenses/by-sa/3.0/
 /*PGR-GNU*****************************************************************
 
 Copyright (c) 2015 pgRouting developers
@@ -29,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
         true,  -- directed graph?
         true,  -- has_reverse_cost?
         -- include the turn restrictions
-        'SELECT to_cost, target_id::INTEGER, from_edge||coalesce('',''||via_path,'''') AS via_path FROM restrictions');
+        'SELECT to_cost, target_id::INTEGER, via_path FROM old_restrictions');
 
     SELECT * FROM pgr_trspViaEdges(
         'SELECT id::INTEGER, source::INTEGER, target::INTEGER,cost, reverse_cost FROM edges',
@@ -38,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
         true,  -- directed graph?
         true,  -- has_reverse_cost?
         -- include the turn restrictions
-        'SELECT to_cost, target_id::INTEGER, from_edge||coalesce('',''||via_path,'''') AS via_path FROM restrictions');
+        'SELECT to_cost, target_id::INTEGER, via_path FROM old_restrictions');
     SELECT * FROM pgr_trspViaEdges(
         'SELECT id::INTEGER, source::INTEGER, target::INTEGER,cost, reverse_cost FROM edges',
         ARRAY[1,11,6]::INTEGER[],           -- array of eids
@@ -46,7 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
         true,  -- directed graph?
         true,  -- has_reverse_cost?
         -- include the turn restrictions
-        'SELECT to_cost, target_id::INTEGER, from_edge||coalesce('',''||via_path,'''') AS via_path FROM restrictions');
+        'SELECT to_cost, target_id::INTEGER, via_path FROM old_restrictions');
     SELECT * FROM pgr_trspViaEdges(
         'SELECT id::INTEGER, source::INTEGER, target::INTEGER,cost, reverse_cost FROM edges',
         ARRAY[1,11,6]::INTEGER[],           -- array of eids
@@ -54,4 +56,4 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
         true,  -- directed graph?
         true,  -- has_reverse_cost?
         -- include the turn restrictions
-        'SELECT to_cost, target_id::INTEGER, from_edge||coalesce('',''||via_path,'''') AS via_path FROM restrictions');
+        'SELECT to_cost, target_id::INTEGER, via_path FROM old_restrictions');

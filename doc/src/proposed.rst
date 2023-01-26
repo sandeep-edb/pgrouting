@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/proposed.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/proposed.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/proposed.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/proposed.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/proposed.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/proposed.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/proposed.html>`__
@@ -54,6 +55,17 @@ Proposed Functions
 .. include:: withPoints-family.rst
    :start-after: index proposed from here
    :end-before: index proposed to here
+
+:doc:`TRSP-family`
+
+.. include:: TRSP-family.rst
+   :start-after: index proposed from here
+   :end-before: index proposed to here
+
+.. toctree::
+   :hidden:
+
+   TRSP-family
 
 :doc:`topology-functions`
 
@@ -124,6 +136,15 @@ Proposed Functions
     KSP-category
     via-category
     withPoints-category
+
+.. rubric:: Utilities
+
+:doc:`pgr_findCloseEdges`
+
+.. toctree::
+    :hidden:
+
+    pgr_findCloseEdges
 
 See Also
 -------------------------------------------------------------------------------

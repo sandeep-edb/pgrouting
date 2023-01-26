@@ -10,6 +10,14 @@ SET(LOCAL_FILES
     pgr_trspViaVertices.sql
 
     pgr_trspViaEdges.sql
+    _trsp_withPoints.sql
+    trsp_withPoints.sql
+
+    trspVia.sql
+    _trspVia.sql
+
+    trspVia_withPoints.sql
+    _trspVia_withPoints.sql
     )
 
 foreach (f ${LOCAL_FILES})

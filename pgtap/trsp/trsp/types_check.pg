@@ -1,0 +1,51 @@
+
+/*PGR-GNU*****************************************************************
+
+Copyright (c) 2018  pgRouting developers
+Mail: project@pgrouting.org
+
+------
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ ********************************************************************PGR-GNU*/
+
+BEGIN;
+
+SELECT CASE WHEN min_version('3.4.0') THEN plan(20) ELSE plan(8) END;
+
+SELECT has_function('pgr_trsp');
+
+SELECT has_function('pgr_trsp', ARRAY['text','integer','integer','boolean','boolean','text']);
+SELECT has_function('pgr_trsp', ARRAY['text','integer','double precision','integer','double precision','boolean','boolean','text']);
+
+SELECT function_returns('pgr_trsp', ARRAY['text','integer','integer','boolean','boolean','text'],'setof record');
+SELECT function_returns('pgr_trsp', ARRAY['text','integer','double precision','integer','double precision','boolean','boolean','text'],'setof record');
+
+SELECT bag_has(
+  $$SELECT  proargnames from pg_proc where proname = 'pgr_trsp'$$,
+  $$VALUES
+  ('{"","","","","","restrictions_sql","seq","id1","id2","cost"}'::TEXT[]),
+  ('{"","","","","","","","turn_restrict_sql","seq","id1","id2","cost"}'::TEXT[])
+  $$, 'old signature names');
+
+SELECT bag_has(
+  $$SELECT  proallargtypes from pg_proc where proname = 'pgr_trsp'$$,
+  $$VALUES
+  ('{25,23,23,16,16,25,23,23,23,701}'::OID[]),
+  ('{25,23,701,23,701,16,16,25,23,23,23,701}'::OID[])
+  $$, 'old signature types');
+
+
+SELECT types_check_general('pgr_trsp');
+
+SELECT finish();
+ROLLBACK;

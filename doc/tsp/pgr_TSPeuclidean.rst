@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/pgr_TSPeuclidean.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/pgr_TSPeuclidean.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/pgr_TSPeuclidean.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/pgr_TSPeuclidean.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/pgr_TSPeuclidean.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/pgr_TSPeuclidean.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/pgr_TSPeuclidean.html>`__
@@ -89,10 +90,13 @@ Signatures
 .. index::
     single: TSPeuclidean
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_TSPeuclidean(`Coordinates SQL`_, [start id], [end_id])
-    RETURNS SETOF (seq, node, cost, agg_cost)
+   | pgr_TSPeuclidean(`Coordinates SQL`_, ``[start_id, end_id]``)
+
+   | RETURNS SET OF |tsp-result|
+   | OR EMTPY SET
 
 :Example: With default values
 
@@ -118,6 +122,9 @@ TSP optional parameters
 
 Inner Queries
 -------------------------------------------------------------------------------
+
+Coordinates SQL
+...............................................................................
 
 .. include:: ../../src/common/coordinates_input.c
    :start-after: Coordinates SQL definition start

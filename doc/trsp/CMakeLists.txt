@@ -1,6 +1,10 @@
 
 SET(LOCAL_FILES
+    TRSP-family.rst
     pgr_trsp.rst
+    pgr_trspVia.rst
+    pgr_trspVia_withPoints.rst
+    pgr_trsp_withPoints.rst
     pgr_turnRestrictedPath.rst
     )
 

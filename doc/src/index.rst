@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/index.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/index.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/index.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/index.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/index.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/index.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/index.html>`__
@@ -108,6 +109,11 @@ Available Functions but not official pgRouting functions
 
     release_notes
 
+
+.. toctree::
+    :hidden:
+
+    migration
 
 .. rubric:: Indices and tables
 

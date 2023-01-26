@@ -1,3 +1,5 @@
+-- CopyRight(c) pgRouting developers
+-- Creative Commons Attribution-Share Alike 3.0 License : https://creativecommons.org/licenses/by-sa/3.0/
 /* -- g1 */
 SELECT *
 FROM (VALUES (1, 1, 2, 5), (2, 1, 3, -3))
@@ -177,40 +179,21 @@ UPDATE edges SET component = v.component
 FROM (SELECT id, component FROM vertices) AS v
 WHERE source = v.id;
 /* -- connect6 */
-WITH
-edges_sql AS (SELECT id, geom FROM edges WHERE component = 1),
-point_sql AS (SELECT geom AS point FROM vertices WHERE component = 2),
-results AS (
-  SELECT
-    id::BIGINT AS edge_id,
-    ST_LineLocatePoint(geom, point) AS fraction,
-    CASE WHEN ST_Intersects(ST_Buffer(geom, 2, 'side=right endcap=flat'), point)
-         THEN 'r'
-         ELSE 'l' END::CHAR AS side,
-    geom <-> point AS distance,
-    point,
-    ST_MakeLine(point, ST_ClosestPoint(geom, point)) AS new_line
-  FROM  edges_sql, point_sql
-  WHERE ST_DWithin(geom, point, 2)
-  ORDER BY geom <-> point),
-prepare_cap AS (
-  SELECT row_number() OVER (PARTITION BY point ORDER BY point, distance) AS rn, *
-  FROM results),
-cap AS (
-  SELECT edge_id, fraction, side, distance, point, new_line
-  FROM prepare_cap
-  WHERE rn <= 1
-)
-SELECT edge_id, fraction, side, distance, point AS geom, new_line AS edge, id AS closest_vertex
-INTO closest
-FROM cap JOIN vertices ON (point = geom) ORDER BY distance LIMIT 1;
+SELECT edge_id, fraction, ST_AsText(edge) AS edge, id AS closest_vertex
+FROM pgr_findCloseEdges(
+  $$SELECT id, geom FROM edges WHERE component = 1$$,
+  (SELECT array_agg(geom) FROM vertices WHERE component = 2),
+  2, partial => false) JOIN vertices USING (geom) ORDER BY distance LIMIT 1;
 /* -- connect7 */
 WITH
 info AS (
   SELECT
     edge_id, fraction, side, distance, ce.geom, edge, v.id AS closest,
     source, target, capacity, reverse_capacity, e.geom AS e_geom
-  FROM closest AS ce
+  FROM pgr_findCloseEdges(
+    $$SELECT id, geom FROM edges WHERE component = 1$$,
+    (SELECT array_agg(geom) FROM vertices WHERE component = 2),
+    2, partial => false) AS ce
   JOIN vertices AS v USING (geom)
   JOIN edges AS e ON (edge_id = e.id)
   ORDER BY distance LIMIT 1),

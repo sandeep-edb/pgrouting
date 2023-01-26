@@ -1,3 +1,5 @@
+-- CopyRight(c) pgRouting developers
+-- Creative Commons Attribution-Share Alike 3.0 License : https://creativecommons.org/licenses/by-sa/3.0/
 
 
 
@@ -14,7 +16,7 @@ SELECT * FROM _pgr_trsp(
 
 SELECT * FROM _pgr_trsp(
     'SELECT id::INTEGER, source::INTEGER, target::INTEGER, cost FROM edges',
-    $$ SELECT * FROM new_restrictions $$,
+    $$ SELECT * FROM restrictions $$,
     6, 1, false
 );
 
@@ -22,9 +24,8 @@ SELECT * FROM _pgr_trsp(
 SELECT * FROM pgr_trsp(
     'SELECT id::INTEGER, source::INTEGER, target::INTEGER, cost FROM edges',
     6, 1, false, false,
-    'SELECT to_cost, target_id::int4,
-    from_edge || coalesce('','' || via_path, '''') AS via_path
-    FROM restrictions'
+    'SELECT to_cost, target_id::int4, via_path
+    FROM old_restrictions'
 );
 
 

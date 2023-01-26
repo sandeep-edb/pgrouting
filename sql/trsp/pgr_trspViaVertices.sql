@@ -56,6 +56,7 @@ DECLARE
 has_reverse BOOLEAN;
 new_sql TEXT;
 BEGIN
+  RAISE WARNING 'pgr_trspViaVertices(text,anyarray,boolean,boolean,text) is been deprecated';
 
     has_reverse =_pgr_parameter_check('dijkstra', edges_sql, false);
 
@@ -94,14 +95,7 @@ ROWS 1000;
 
 COMMENT ON FUNCTION pgr_trspViaVertices(TEXT, ANYARRAY, BOOLEAN, BOOLEAN, TEXT)
 IS 'pgr_trspViaVertices
-- PROTOTYPE
-- Parameters
-    - edges SQL with columns: id, source, target, cost [,reverse_cost]
-    - ARRAY[Via vertices identifiers
-    - directed
-    - has reverse cost
-- Optional parameters
-    - restrictions_sql := NULL
+- DEPRECATED function on v3.4.0
 - Documentation:
-    - ${PROJECT_DOC_LINK}/pgr_trsp.html
+  - ${PROJECT_DOC_LINK}/pgr_trspVia.html
 ';

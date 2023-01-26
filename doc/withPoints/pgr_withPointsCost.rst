@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/pgr_withPointsCost.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/pgr_withPointsCost.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/pgr_withPointsCost.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/pgr_withPointsCost.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/pgr_withPointsCost.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/pgr_withPointsCost.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/pgr_withPointsCost.html>`__
@@ -104,19 +105,18 @@ Signatures
 
 .. rubric:: Summary
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', **start vid**, **end vid**
-            [, directed] [, driving_side])
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', **start vid**, **end vids**
-            [, directed] [, driving_side])
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', **start vids**, **end vid**
-            [, directed] [, driving_side])
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', **start vids**, **end vids**
-            [, directed] [, driving_side])
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', `Combinations SQL`_
-            [, directed] [, driving_side])
-    RETURNS (start_vid, end_vid, agg_cost)
+   | pgr_withPointsCost(`Edges SQL`_, 'Points SQL`_, **start vid**, **end vid**, [**options**])
+   | pgr_withPointsCost(`Edges SQL`_, 'Points SQL`_, **start vid**, **end vids**, [**options**])
+   | pgr_withPointsCost(`Edges SQL`_, 'Points SQL`_, **start vids**, **end vid**, [**options**])
+   | pgr_withPointsCost(`Edges SQL`_, 'Points SQL`_, **start vids**, **end vids**, [**options**])
+   | pgr_withPointsCost(`Edges SQL`_, 'Points SQL`_, `Combinations SQL`_, [**options**])
+   | **options:**  ``[directed, driving_side]``
+
+   | RETURNS SET OF |matrix-pid|
+   | OR EMPTY SET
 
 .. note:: There is no **details** flag, unlike the other members of the
    withPoints family of functions.
@@ -127,11 +127,14 @@ Signatures
 One to One
 ...............................................................................
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsCost(`Edges SQL`_, **start vid**, **end vid**
-            [, directed] [, driving_side])
-    RETURNS (start_vid, end_vid, agg_cost)
+   | pgr_withPointsCost(`Edges SQL`_, 'Points SQL`_, **start vid**, **end vid**, [**options**])
+   | **options:**  ``[directed, driving_side]``
+
+   | RETURNS SET OF |matrix-pid|
+   | OR EMPTY SET
 
 :Example: From point :math:`1` to vertex :math:`10` with defaults
 
@@ -145,11 +148,14 @@ One to One
 One to Many
 ...............................................................................
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', **start vid**, **end vids**
-            [, directed] [, driving_side])
-    RETURNS (start_vid, end_vid, agg_cost)
+   | pgr_withPointsCost(`Edges SQL`_, `Points SQL`_, **start vid**, **end vids**, [**options**])
+   | **options:**  ``[directed, driving_side]``
+
+   | RETURNS SET OF |matrix-pid|
+   | OR EMPTY SET
 
 :Example: From point :math:`1` to point :math:`3` and vertex :math:`7` on an
           undirected graph
@@ -164,11 +170,14 @@ One to Many
 Many to One
 ...............................................................................
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', **start vids**, **end vid**
-            [, directed] [, driving_side])
-    RETURNS (start_vid, end_vid, agg_cost)
+   | pgr_withPointsCost(`Edges SQL`_, `Points SQL`_, **start vids**, **end vid**, [**options**])
+   | **options:**  ``[directed, driving_side]``
+
+   | RETURNS SET OF |matrix-pid|
+   | OR EMPTY SET
 
 :Example: From point :math:`1` and vertex :math:`6` to point :math:`3`
 
@@ -182,11 +191,14 @@ Many to One
 Many to Many
 ...............................................................................
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', **start vids**, **end vids**
-            [, directed] [, driving_side])
-    RETURNS (start_vid, end_vid, agg_cost)
+   | pgr_withPointsCost(`Edges SQL`_, `Points SQL`_, **start vids**, **end vids**, [**options**])
+   | **options:**  ``[directed, driving_side]``
+
+   | RETURNS SET OF |matrix-pid|
+   | OR EMPTY SET
 
 :Example: From point :math:`15` and vertex :math:`6`  to point :math:`3` and
           vertex :math:`1`
@@ -201,11 +213,14 @@ Many to Many
 Combinations
 ...............................................................................
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsCost(`Edges SQL`_, 'Points SQL', `Combinations SQL`_
-            [, directed] [, driving_side])
-    RETURNS (seq, path_seq, start_vid, end_vid, node, edge, cost, agg_cost)
+   | pgr_withPointsCost(`Edges SQL`_, `Points SQL`_, `Combinations SQL`_, [**options**])
+   | **options:**  ``[directed, driving_side]``
+
+   | RETURNS SET OF |matrix-pid|
+   | OR EMPTY SET
 
 :Example: Two combinations
 
@@ -311,6 +326,20 @@ Additional Examples
 
 .. contents::
    :local:
+
+Use :doc:`pgr_findCloseEdges` in the `Points SQL`_.
+...............................................................................
+
+Find the cost of the routes from vertex :math:`1` to the two closest locations
+on the graph of point `(2.9, 1.8)`.
+
+.. literalinclude:: doc-pgr_withPointsCost.queries
+    :start-after: -- q9
+    :end-before: -- q10
+
+* Point :math:`-1` corresponds to the closest edge from point `(2.9,1.8)`.
+* Point :math:`-2` corresponds to the next close edge from point `(2.9,1.8)`.
+* Being close to the graph does not mean have a shorter route.
 
 Right side driving topology
 ...............................................................................

@@ -1,0 +1,57 @@
+
+/*PGR-GNU*****************************************************************
+
+Copyright (c) 2018  pgRouting developers
+Mail: project@pgrouting.org
+
+------
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ ********************************************************************PGR-GNU*/
+
+BEGIN;
+
+UPDATE edge_table SET cost = sign(cost), reverse_cost = sign(reverse_cost);
+SELECT plan(1);
+SET client_min_messages TO ERROR;
+
+PREPARE pd AS
+SELECT seq, vehicle_seq, vehicle_id, stop_seq, stop_type,
+    order_id, cargo,
+    travel_time, arrival_time, wait_time, service_time, departure_time
+FROM _pgr_pickDeliver(
+    'SELECT * FROM orders ORDER BY id',
+    'SELECT * from vehicles',
+    -- matrix query
+    'WITH
+    A AS (
+        SELECT p_node_id AS id, p_x AS x, p_y AS y FROM orders
+        UNION
+        SELECT d_node_id AS id, d_x, d_y FROM orders
+        UNION
+        SELECT start_node_id, start_x, start_y FROM vehicles
+    )
+    SELECT A.id AS start_vid, B.id AS end_vid, sqrt( (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)) AS agg_cost
+    FROM A, A AS B WHERE A.id != B.id'
+    );
+
+PREPARE pd_e AS
+SELECT * FROM _pgr_pickDeliverEuclidean(
+    'SELECT * FROM orders ORDER BY id',
+    'SELECT * from vehicles');
+
+SELECT set_eq('pd', 'pd_e');
+
+
+
+SELECT finish();
+ROLLBACK;

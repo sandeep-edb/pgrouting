@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/topology-functions.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/topology-functions.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/topology-functions.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/topology-functions.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/topology-functions.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/topology-functions.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/topology-functions.html>`__
@@ -74,6 +75,7 @@ have special permissions given by the administrators to use them.
 
 These proposed functions do not modify the database.
 
+- :doc:`pgr_degree` - Calculates the degree of the vertices of a graph.
 - :doc:`pgr_extractVertices` - Extracts vertex information based on the edge
   table information.
 
@@ -88,6 +90,7 @@ These proposed functions do not modify the database.
   pgr_analyzeOneWay
   pgr_nodeNetwork
   pgr_extractVertices
+  pgr_degree
 
 See Also
 -------------------------------------------------------------------------------

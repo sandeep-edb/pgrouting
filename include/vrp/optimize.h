@@ -62,7 +62,7 @@ class Optimize : public Solution {
      bool inter_swap();
 
      bool move_order(
-             const Order& order,
+             Order order,
              Vehicle_pickDeliver &from_truck,
              Vehicle_pickDeliver &to_truck);
      void save_if_best();

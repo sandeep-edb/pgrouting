@@ -30,14 +30,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #include "withPoints/pgr_withPoints.hpp"
 
-#include <algorithm>
-#include <cassert>
+#include <sstream>
 #include <deque>
 #include <set>
-#include <sstream>
-#include <string>
-#include <utility>
 #include <vector>
+#include <string>
+#include <algorithm>
+#include <cassert>
 
 #include "cpp_common/pgr_assert.h"
 
@@ -70,14 +69,14 @@ Pg_points_graph::edges_of_points() const {
 
 
 Pg_points_graph::Pg_points_graph(
-        const std::vector<Point_on_edge_t>& p_points,
+        std::vector<Point_on_edge_t> p_points,
         std::vector<Edge_t>      p_edges_of_points,
         bool p_normal,
         char p_driving_side,
         bool p_directed) :
     m_points(p_points),
     m_o_points(p_points),
-    m_edges_of_points(std::move(p_edges_of_points)),
+    m_edges_of_points(p_edges_of_points),
     m_driving_side(p_driving_side),
     m_directed(p_directed) {
     if (!p_normal) {
@@ -180,8 +179,8 @@ Pg_points_graph::eliminate_details_dd(
      * There is no path nothing to do
      */
     if (path.empty()) return;
-
     Path newPath(path.start_id(), path.end_id());
+
     auto edge_id = path.start_id() < 0?
         get_edge_id(path.start_id()) :
         -1;
@@ -228,43 +227,31 @@ Pg_points_graph::eliminate_details_dd(
 
 Path
 Pg_points_graph::eliminate_details(
-        const Path& path) const {
+        Path path) const {
     /*
      * There is no path nothing to do
      */
     if (path.empty()) return path;
+    path.recalculate_agg_cost();
 
     Path newPath(path.start_id(), path.end_id());
+
     double cost = 0.0;
+    auto current_node = path[0].node;
+    auto current_edge = path[0].edge;
+
     for (const auto &pathstop : path) {
-        if ((pathstop.node == path.start_id())
-                || (pathstop.node == path.end_id())
-                || (pathstop.node > 0)) {
-            newPath.push_back(pathstop);
-            if (pathstop.node != path.end_id()) cost = 0.0;
-            continue;
+        if (pathstop.edge == current_edge) {
+           cost += pathstop.cost;
+           continue;
         }
-        cost += pathstop.cost;
+        newPath.push_back({current_node, current_edge, cost, 0});
+        cost = pathstop.cost;
+        current_node = pathstop.node;
+        current_edge = pathstop.edge;
     }
-
-    newPath[0].cost = newPath[1].agg_cost;
-    for (unsigned int i = 1; i < newPath.size() - 2; ++i) {
-        /* newPath[i] has: node, edge, cost, agg_cost
-         * pgr_type_t has: id, source, target, cost, reverse_cost
-         *
-         * find the edge where the pathstop.edge == edge.id */
-
-        int64_t edge_to_find = newPath[i].edge;
-        auto edge_ptr = std::find_if(
-                m_edges_of_points.begin(), m_edges_of_points.end(),
-                [&edge_to_find](const Edge_t &edge)
-                {return edge_to_find == edge.id;});
-        if (edge_ptr != m_edges_of_points.end()) {
-            newPath[i].cost = edge_ptr->target == newPath[i+1].node ?
-                edge_ptr->cost : edge_ptr->reverse_cost;
-        }
-    }
-    newPath[newPath.size()-2].cost += cost;
+    newPath.push_back({current_node, current_edge, cost, 0});
+    newPath.recalculate_agg_cost();
 
     return newPath;
 }

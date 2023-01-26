@@ -1,7 +1,9 @@
 # Do not use extensions
 SET(LOCAL_FILES
     doc-trsp
-    trsp_notes
+    trsp_withPoints
+    trspVia
+    trspVia_withPoints
     )
 
 foreach (f ${LOCAL_FILES})

@@ -1,0 +1,69 @@
+
+/*PGR-GNU*****************************************************************
+
+Copyright (c) 2018  pgRouting developers
+Mail: project@pgrouting.org
+
+------
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ ********************************************************************PGR-GNU*/
+BEGIN;
+SELECT plan(1);
+
+UPDATE edge_table SET cost = sign(cost) + 0.001 * id * id, reverse_cost = sign(reverse_cost) + 0.001 * id * id;
+
+CREATE OR REPLACE FUNCTION do_test() RETURNS SETOF TEXT AS
+$BODY$
+BEGIN
+
+  IF min_version('3.4.0') THEN
+    prepare q1 AS
+    SELECT seq, node, edge, cost::TEXT FROM pgr_trsp(
+      'select id, source, target, cost, reverse_cost from edge_table',
+      $$SELECT 1 AS id, 100::float AS cost, 25::INTEGER AS target_id, ARRAY[33, 32, 25] AS path$$,
+      1,     -- node_id of start
+      5,     -- node_id of end
+      true);  -- directed graph?
+
+    prepare q2 AS
+    SELECT seq, node, edge, cost::TEXT FROM pgr_dijkstra(
+      'select id, source, target, cost, reverse_cost from edge_table',
+      1, 5);
+  ELSE
+
+    prepare q1 AS
+    SELECT seq, id1, id2, cost::TEXT FROM pgr_trsp(
+      'select id::INTEGER, source::INTEGER, target::INTEGER, cost, reverse_cost from edge_table',
+      1,     -- node_id of start
+      5,     -- node_id of end
+      true,  -- directed graph?
+      true,  -- has_reverse_cost?
+      null); -- no turn restrictions
+
+    prepare q2 AS
+    SELECT seq-1, node::INTEGER, edge::INTEGER, cost::TEXT FROM pgr_dijkstra(
+      'select id, source, target, cost, reverse_cost from edge_table',
+      1, 5);
+  END IF;
+
+  RETURN QUERY
+  SELECT set_eq('q2', 'q1', 'No turn restriction from 1 to 5 returns same as dijkstra');
+END;
+
+$BODY$
+LANGUAGE plpgSQL;
+
+SELECT do_test();
+
+SELECT finish();
+ROLLBACK;

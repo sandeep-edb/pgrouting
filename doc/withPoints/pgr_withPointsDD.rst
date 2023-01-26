@@ -11,7 +11,8 @@
 
 * **Supported versions:**
   `Latest <https://docs.pgrouting.org/latest/en/pgr_withPointsDD.html>`__
-  (`3.3 <https://docs.pgrouting.org/3.3/en/pgr_withPointsDD.html>`__)
+  (`3.4 <https://docs.pgrouting.org/3.4/en/pgr_withPointsDD.html>`__)
+  `3.3 <https://docs.pgrouting.org/3.3/en/pgr_withPointsDD.html>`__
   `3.2 <https://docs.pgrouting.org/3.2/en/pgr_withPointsDD.html>`__
   `3.1 <https://docs.pgrouting.org/3.1/en/pgr_withPointsDD.html>`__
   `3.0 <https://docs.pgrouting.org/3.0/en/pgr_withPointsDD.html>`__
@@ -54,13 +55,16 @@ The edges extracted will conform the corresponding spanning tree.
 Signatures
 -------------------------------------------------------------------------------
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsDD(`Edges SQL`_, `Points SQL`_, **Root vid**, **distance**
-       [, directed] [, driving_side] [, details])
-    pgr_withPointsDD(`Edges SQL`_, `Points SQL`_, **Root vids**, **distance**
-       [, directed] [, driving_side] [, details] [, equicost])
-    RETURNS SET OF (seq, [start_vid,] node, edge, cost, agg_cost)
+   | pgr_withPointsDD(`Edges SQL`_, `Points SQL`_, **root vid**, **distance**, [**options A**])
+   | pgr_withPointsDD(`Edges SQL`_, `Points SQL`_, **root vids**, **distance**, [**options B**])
+   | **options A:** ``[directed, driving_side, details]``
+   | **options B:** ``[directed, driving_side, details, equicost]``
+
+   | RETURNS SET OF |result-generic-no-seq|
+   | OR EMPTY SET
 
 .. index::
     single: withPointsDD(Single Vertex) - Proposed on v2.2
@@ -68,11 +72,14 @@ Signatures
 Single vertex
 ...............................................................................
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsDD(`Edges SQL`_, `Points SQL`_, **Root vid**, **distance**
-       [, directed] [, driving_side] [, details])
-    RETURNS SET OF (seq, node, edge, cost, agg_cost)
+   | pgr_withPointsDD(`Edges SQL`_, `Points SQL`_, **root vid**, **distance**, [**options**])
+   | **options:** ``[directed, driving_side, details]``
+
+   | RETURNS SET OF |result-1-1-no-seq|
+   | OR EMPTY SET
 
 :Example: Right side driving topology, from point :math:`1` within a distance of
           :math:`3.3` with details.
@@ -87,11 +94,14 @@ Single vertex
 Multiple vertices
 ...............................................................................
 
-.. parsed-literal::
+.. admonition:: \ \
+   :class: signatures
 
-    pgr_withPointsDD(`Edges SQL`_, `Points SQL`_, **Root vids**, **distance**
-       [, directed] [, driving_side] [, details] [, equicost])
-    RETURNS SET OF (seq, start_vid, node, edge, cost, agg_cost)
+   | pgr_withPointsDD(`Edges SQL`_, `Points SQL`_, **root vids**, **distance**, [**options**])
+   | **options:** ``[directed, driving_side, details, equicost]``
+
+   | RETURNS SET OF |result-m-1-no-seq|
+   | OR EMPTY SET
 
 :Example: From point :math:`1` and vertex :math:`16` within a distance of
           :math:`3.3` with ``equicost`` on a directed graph
@@ -123,7 +133,7 @@ Parameters
 
        - Negative values represent a point
    * - **Root vids**
-     - ``ARRAY[ANY-INTEGER]``
+     - ``ARRAY`` [**ANY-INTEGER**]
      - Array of identifiers of the root vertices.
 
 
@@ -175,7 +185,7 @@ Points SQL
 Result Columns
 -------------------------------------------------------------------------------
 
-Returns SET OF ``(seq, [start_vid,] node, edge, cost, agg_cost)``
+RETURNS SET OF |result-generic-no-seq|
 
 .. list-table::
    :width: 81
@@ -218,6 +228,19 @@ Additional Examples
 
 .. contents::
    :local:
+
+Use :doc:`pgr_findCloseEdges` in the `Points SQL`_.
+...............................................................................
+
+Find the driving distance from the two closest locations on the graph of point
+`(2.9, 1.8)`.
+
+.. literalinclude:: doc-pgr_withPointsDD.queries
+    :start-after: -- q5
+    :end-before: -- q6
+
+* Point :math:`-1` corresponds to the closest edge from point `(2.9,1.8)`.
+* Point :math:`-2` corresponds to the next close edge from point `(2.9,1.8)`.
 
 Driving side does not matter
 ...............................................................................

@@ -27,6 +27,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #include "alphaShape/pgr_alphaShape.h"
 
+#include <sstream>
+#include <set>
+#include <vector>
+#include <algorithm>
+#include <utility>
+#include <map>
+
 #include <visitors/dijkstra_one_goal_visitor.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/filtered_graph.hpp>
@@ -43,12 +50,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #include <boost/geometry/algorithms/distance.hpp>
 
 
-#include <sstream>
-#include <set>
-#include <vector>
-#include <algorithm>
-#include <utility>
-#include <map>
 #include "cpp_common/interruption.h"
 
 namespace bg = boost::geometry;
@@ -224,7 +225,7 @@ Pgr_alphaShape::make_triangles() {
  * Radius of triangle's circumcenter
  */
 double
-Pgr_alphaShape::radius(const Triangle& t) const {
+Pgr_alphaShape::radius(const Triangle t) const {
         std::vector<E> edges(t.begin(), t.end());
         auto a = graph.source(edges[0]);
         auto b = graph.target(edges[0]);
@@ -240,7 +241,7 @@ Pgr_alphaShape::radius(const Triangle& t) const {
  * The whole traingle face belongs to the shape?
  */
 bool
-Pgr_alphaShape::faceBelongs(const Triangle& t, double alpha) const {
+Pgr_alphaShape::faceBelongs(const Triangle t, double alpha) const {
         return radius(t) <= alpha;
 }
 
@@ -317,7 +318,7 @@ Pgr_alphaShape::build_best_alpha() const {
 
 void
 Pgr_alphaShape::recursive_build(
-        const Triangle& face,
+        const Triangle face,
         std::set<Triangle> &used,
         std::set<E> &border_edges,
         double alpha) const {
